@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seeds of Faith Progress</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #ffffff;
+    }
+
+    .fill-container {
+      position: relative;
+      width: 500px;   /* adjust to your image size */
+      height: 300px;
+      overflow: hidden;
+    }
+
+    /* The rising color block */
+    .fill {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%; /* start full */
+      background: #c3c3c3;
+      transition: height 1s ease-in-out;
+      z-index: 1; /* below mask, above background */
+    }
+
+    /* The mask image */
+    .mask {
+      position: absolute;
+      inset: 0;
+      background: url("bulldogCatholic_Seeds-of-Faith_Logo_white_transparent.png") center/cover no-repeat;
+      mix-blend-mode: destination-in;
+      z-index: 2;
+    }
+
+    /* The original picture behind it all */
+    .background {
+      position: absolute;
+      inset: 0;
+      background: url("bulldogCatholic_Seeds-of-Faith_Logo_white_colored.png") center/cover no-repeat;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="fill-container">
+    <div class="background"></div>
+    <div class="fill" id="fill"></div>
+    <div class="mask"></div>
+  </div>
+
+  <script>
+    // Function to control fill % (0–100)
+    function setFill(percent) {
+      finalFill = 100 - percent;  
+      const fill = document.getElementById("fill");
+      fill.style.height = finalFill + "%";
+    }
+
+    // Example: animate to 70% after 1 second
+    setTimeout(() => setFill(70), 500);
+  </script>
+</body>
+</html>
