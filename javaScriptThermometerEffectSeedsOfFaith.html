@@ -7,10 +7,12 @@
   <style>
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       background: #ffffff;
+      font-family: Arial, sans-serif;
     }
 
     .fill-container {
@@ -18,34 +20,69 @@
       width: 500px;   /* adjust to your image size */
       height: 300px;
       overflow: hidden;
+      margin-bottom: 20px;
     }
 
-    /* The rising color block */
     .fill {
       position: absolute;
       top: 0;
       width: 100%;
-      height: 100%; /* start full */
-      background: #c3c3c3;
+      height: 100%;
+      background: #ffffff;
       transition: height 1s ease-in-out;
-      z-index: 1; /* below mask, above background */
+      z-index: 1;
     }
 
-    /* The mask image */
     .mask {
       position: absolute;
       inset: 0;
-      background: url("bulldogCatholic_Seeds-of-Faith_Logo_white_transparent.png") center/cover no-repeat;
+      background: url("SoF - Thermometer - Building Illustration - Personal Coloring - grayscale V2.png") center/cover no-repeat;
       mix-blend-mode: destination-in;
       z-index: 2;
     }
 
-    /* The original picture behind it all */
     .background {
       position: absolute;
       inset: 0;
-      background: url("bulldogCatholic_Seeds-of-Faith_Logo_white_colored.png") center/cover no-repeat;
+      background: url("SoF - Thermometer - Building Illustration - Personal Coloring - colored V2.jpg") center/cover no-repeat;
       z-index: 0;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      width: 150px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .percentage-display {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
     }
   </style>
 </head>
@@ -56,16 +93,59 @@
     <div class="mask"></div>
   </div>
 
+  <div class="controls">
+    <input type="text" id="fillInput" placeholder="Enter amount (1–50M)">
+    <button id="submitBtn">Set Fill</button>
+  </div>
+
+  <div class="percentage-display" id="percentageDisplay"></div>
+
   <script>
-    // Function to control fill % (0–100)
+    const MAX_GOAL = 50000000; // 50 million
+
     function setFill(percent) {
-      finalFill = 100 - percent;  
       const fill = document.getElementById("fill");
+      const finalFill = 100 - percent;
       fill.style.height = finalFill + "%";
     }
 
-    // Example: animate to 70% after 1 second
-    setTimeout(() => setFill(70), 500);
+    function updateFillFromAmount(amount) {
+      const percent = (amount / MAX_GOAL) * 100;
+      const clamped = Math.min(Math.max(percent, 0), 100);
+      setFill(clamped);
+      document.getElementById("percentageDisplay").textContent =
+        `Progress: ${clamped.toFixed(1)}%`;
+    }
+
+    function updateFillFromAmount(amount) {
+      const percent = (amount / MAX_GOAL) * 100;
+      const clamped = Math.min(Math.max(percent, 0), 100);
+      setFill(clamped);
+      document.getElementById("percentageDisplay").textContent =
+        `Progress: ${clamped.toFixed(1)}%`;
+    }
+
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      const input = document.getElementById("fillInput");
+      const value = parseFloat(input.value.replace(/,/g, "")); // allow commas
+
+      if (isNaN(value) || value < 1 || value > MAX_GOAL) {
+        alert("Please enter a number between 1 and 50,000,000.");
+        return;
+      }
+
+      updateFillFromAmount(value);
+    });
+
+    // Allow pressing "Enter" to submit
+    document.getElementById("fillInput").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        document.getElementById("submitBtn").click();
+      }
+    });
+
+    // Example starting fill
+    setTimeout(() => updateFillFromAmount(45000000), 500);
   </script>
 </body>
 </html>
