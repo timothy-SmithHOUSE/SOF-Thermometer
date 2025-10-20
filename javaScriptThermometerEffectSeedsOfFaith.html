@@ -65,6 +65,17 @@
       transition: top 1s ease-in-out;
     }
 
+    .measure-line {
+      position: absolute;
+      top: 100%; /* start at bottom */
+      transform: translateY(-50%);
+      width: 100%;
+      height: 1px;
+      background: #484848;
+      z-index: 4;
+      transition: top 1s ease-in-out;
+    }
+
     .controls {
       display: flex;
       gap: 10px;
@@ -109,6 +120,7 @@
     <div class="fill" id="fill"></div>
     <div class="mask"></div>
     <div class="amount-label" id="amountLabel">$0</div>
+    <div class="measure-line" id="measureLine"></div>
   </div>
 
   <div class="controls">
@@ -130,6 +142,7 @@
 
       // Move label with the visible color portion
       label.style.top = finalFill + "%";
+      measureLine.style.top = finalFill + "%";
     }
 
     function updateFillFromAmount(amount) {
