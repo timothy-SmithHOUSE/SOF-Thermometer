@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,8 +18,10 @@
 
     .fill-container {
       position: relative;
-      width: 500px;   /* adjust to your image size */
-      height: 300px;
+      aspect-ratio: 3300/1000;
+      width: 50%;
+      /* adjust to your image size */
+      height: auto;
       overflow: hidden;
       margin-bottom: 20px;
     }
@@ -86,6 +89,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="fill-container">
     <div class="background"></div>
@@ -148,4 +152,5 @@
     setTimeout(() => updateFillFromAmount(45000000), 500);
   </script>
 </body>
+
 </html>
