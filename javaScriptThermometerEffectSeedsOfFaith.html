@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,10 +19,10 @@
       position: relative;
       aspect-ratio: 3300/1000;
       width: 50%;
-      /* adjust to your image size */
       height: auto;
-      overflow: hidden;
+      overflow: visible;
       margin-bottom: 20px;
+      isolation: isolate;
     }
 
     .fill {
@@ -31,7 +30,7 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background: #c3c3c3;
+      background: #ffffff;
       transition: height 1s ease-in-out;
       z-index: 1;
     }
@@ -49,6 +48,21 @@
       inset: 0;
       background: url("SoF - Thermometer - Building Illustration - Personal Coloring - colored V2.jpg") center/cover no-repeat;
       z-index: 0;
+    }
+
+    /* Floating label showing actual amount */
+    .amount-label {
+      position: absolute;
+      top: 100%; /* start at bottom */
+      left: 102%; /* just to the right of the thermometer */
+      transform: translateY(-50%);
+      font-size: 18px;
+      font-weight: bold;
+      color: #000000;
+      background: #ffffff;
+      padding: 4px 8px;
+      z-index: 3; /* above everything */
+      transition: top 1s ease-in-out;
     }
 
     .controls {
@@ -89,12 +103,12 @@
     }
   </style>
 </head>
-
 <body>
   <div class="fill-container">
     <div class="background"></div>
     <div class="fill" id="fill"></div>
     <div class="mask"></div>
+    <div class="amount-label" id="amountLabel">$0</div>
   </div>
 
   <div class="controls">
@@ -109,24 +123,25 @@
 
     function setFill(percent) {
       const fill = document.getElementById("fill");
+      const label = document.getElementById("amountLabel");
+
       const finalFill = 100 - percent;
       fill.style.height = finalFill + "%";
+
+      // Move label with the visible color portion
+      label.style.top = finalFill + "%";
     }
 
     function updateFillFromAmount(amount) {
       const percent = (amount / MAX_GOAL) * 100;
       const clamped = Math.min(Math.max(percent, 0), 100);
       setFill(clamped);
-      document.getElementById("percentageDisplay").textContent =
-        `Progress: ${clamped.toFixed(1)}%`;
-    }
 
-    function updateFillFromAmount(amount) {
-      const percent = (amount / MAX_GOAL) * 100;
-      const clamped = Math.min(Math.max(percent, 0), 100);
-      setFill(clamped);
       document.getElementById("percentageDisplay").textContent =
         `Progress: ${clamped.toFixed(1)}%`;
+
+      const label = document.getElementById("amountLabel");
+      label.textContent = "$" + amount.toLocaleString();
     }
 
     document.getElementById("submitBtn").addEventListener("click", () => {
@@ -149,8 +164,7 @@
     });
 
     // Example starting fill
-    setTimeout(() => updateFillFromAmount(45000000), 500);
+    setTimeout(() => updateFillFromAmount(25000000), 500);
   </script>
 </body>
-
 </html>
