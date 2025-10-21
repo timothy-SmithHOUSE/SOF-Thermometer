@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seeds of Faith Progress</title>
   <style>
+
     body {
       display: flex;
       flex-direction: column;
@@ -119,8 +120,8 @@
     <div class="background"></div>
     <div class="fill" id="fill"></div>
     <div class="mask"></div>
-    <div class="amount-label" id="amountLabel">$0</div>
-    <div class="measure-line" id="measureLine"></div>
+    <div class="amount-label" id="amountLabel">$</div>
+    <div class="measure-line" id="measureLine" ></div>
   </div>
 
   <div class="controls">
@@ -154,7 +155,19 @@
         `Progress: ${clamped.toFixed(1)}%`;
 
       const label = document.getElementById("amountLabel");
-      label.textContent = "$" + amount.toLocaleString();
+      label.textContent = "$";
+
+      const oldValue = parseInt(getComputedStyle(label).getPropertyValue("--to")) || 0;
+
+      let start = null;
+      function animateLocaleString(timestamp) {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / 1000, 1); // match 1s duration
+        const current = Math.floor(oldValue + (amount - oldValue) * progress);
+        label.textContent = "$" + current.toLocaleString();
+        if (progress < 1) requestAnimationFrame(animateLocaleString);
+      }
+      requestAnimationFrame(animateLocaleString);
     }
 
     document.getElementById("submitBtn").addEventListener("click", () => {
@@ -177,7 +190,7 @@
     });
 
     // Example starting fill
-    setTimeout(() => updateFillFromAmount(25000000), 500);
+    setTimeout(() => updateFillFromAmount(""), 500);
   </script>
 </body>
 </html>
